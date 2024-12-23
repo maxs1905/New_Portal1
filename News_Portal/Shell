@@ -1,11 +1,11 @@
 1 Создание пользователей:
-from gjango.contrib.auth.models import User
+from django.contrib.auth.models import User
 user1 = User.objects.create_user('user1', 'user1@news.ru', 'password123')
 user2 = User.objects.create_user('user2', 'user2@news.ru', 'password123')
 2 Создание авторов:
 Author
-author1 = Author.objects.create(user = user1)
-author2 = Author. objects.create(user = user2)
+author1 = Author.objects.create(name_author = user1)
+author2 = Author. objects.create(name_author = user2)
 3 Создание категорий:
 from news_portal_mod.models import Category
 category1 = Category.objects.create (name_category = 'Автоспорт')
@@ -15,47 +15,47 @@ category4 = Category.objects.create (name_category = 'Мода')
 4 Создание постов:
 from news_portal_mod.models import Post
 post1 =  Post.objects.create(author = author1,
-                             post_type = 'news',
-                             title_post = 'Результаты гран-при Монако '
-                             text_post = 'Сенсационно победителем стал                     российский гонщик Даниил Квят….  ')
+                             post_type = 'News',
+                             title_post = 'Результаты гран-при Монако ',
+                             text_post = 'Сенсационно победителем стал российский гонщик Даниил Квят….')
 post2 =  Post.objects.create(author = author2,
-                             post_type = 'article',
-                             title_post = 'Фармакалогия '
-                             text_post = 'Для приема тех или иных антибиотиков….  ')
+                             post_type = 'Article',
+                             title_post = 'Фармакалогия ',
+                             text_post = 'Для приема тех или иных антибиотиков….')
 post3 =  Post.objects.create(author = author2,
-                             post_type = 'article',
-                             title_post = ' Что надеть на вечеринку '
-                             text_post = ' Постоянно возникает вопрос, что надеть на вечеринку? В данной статье….  ')
+                             post_type = 'Article',
+                             title_post = ' Что надеть на вечеринку ',
+                             text_post = ' Постоянно возникает вопрос, что надеть на вечеринку? В данной статье….')
 5 Присваивание категорий для постов
 post1.category_post.add(category1)
 post2.category_post.add(category3)
 post3.category_post.add(category4)
 6 Создание комментариев:
 from news_portal_mod.models import Сomment
-comment1 =  Comment.objects.create(post = post1, user= user2, text = ''Даниил красавец!!! '')
-comment2 =  Comment.objects.create(post = post1, user= user1, text = ''Я смотрел эту красоту, Даня всех порвал просто!!!'')
-comment3 =  Comment.objects.create(post = post2, user= user2, text = ''Спасибо. Данная статья была полезной для меня. '')
-comment4 =  Comment.objects.create(post = post3, user= user1, text = ''Нуууу не знаю. У каждого свой вкус. '')
+comment1 =  Comment.objects.create(posts = post1, user= user2, text_comment = 'Даниил красавец!!!')
+comment2 =  Comment.objects.create(posts = post1, user= user1, text_comment = 'Я смотрел эту красоту, Даня всех порвал просто!!!')
+comment3 =  Comment.objects.create(posts = post2, user= user2, text_comment = 'Спасибо. Данная статья была полезной для меня.')
+comment4 =  Comment.objects.create(posts = post3, user= user1, text_comment = 'Нуууу не знаю. У каждого свой вкус.')
 7 Корректировка рейтинга:
 post1.like()
 post2.like()
-post3.dislike
+post3.dislike()
 comment4.dislike()
 8 Обновление рейтинга авторов:
 author1.update_rating()
-author2.update__rating()
+author2.update_rating()
 9 Вывод лучшего пользователя:
-best_user = User.objects.all().order_by('-author__rating').first()
+best_user = Author.objects.all().order_by('-rating').first()
 print(f'' Лучший пользователь: {best_user.username}, Рейтинг: {best_user.author.rating}'')
 10 Вывод лучшей статьи:
-best_post = Post.objects.all().order_by('-rating').first()
+best_post = Post.objects.all().order_by('-rating_post').first()
 print(f"Дата добавления: {best_post.create_time}")
-print(f"Автор: {best_post.author.user.username}")
+print(f"Автор: {best_post.author.name_athor.username}")
 print(f"Рейтинг: {best_post.rating_post}")
 print(f"Заголовок: {best_post.title_post}")
 print(f"Превью: {best_post.preview()}")
 11 Вывод всех комментариев:
-comments =  Comment.objects.filter(post=best_post)
+comments =  Comment.objects.filter(posts=best_post)
 for comment in comments:
     print(f"Дата: {comment.create_time_comment}, Пользователь: {comment.user.username}, Рейтинг: {comment.rating_comment}, Текст: {comment.text_comment}")
 

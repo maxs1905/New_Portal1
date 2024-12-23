@@ -6,9 +6,9 @@ class Author (models.Model):
     name_author = models.OneToOneField(User, on_delete = models.CASCADE)
 
     def update_rating(self):
-        post_rating = sum([post.rating * 3 for post in self.post_set.all()])
-        comments_rating = sum([comment.rating for comment in self.user.comment_set.all()])
-        post_comment_rating = sum([comments_rating for post in self.post_set.all() for comment in post.comment_set.all()])
+        post_rating = sum([post.rating_post * 3 for post in self.posts.all()])
+        comments_rating = sum([comment.rating_comment for comment in self.name_author.comment_set.all()])
+        post_comment_rating = sum([comment.rating_comment for post in self.posts.all() for comment in post.comment_set.all()])
         self.rating = post_rating + comments_rating + post_comment_rating
         self.save()
 
@@ -22,7 +22,7 @@ class Post (models.Model):
         ('News', 'Новости'),
     ]
     author = models.ForeignKey(Author,on_delete=models.CASCADE, related_name='posts')
-    post_type = models.CharField(max_length=5, choices= POST_TYPES)
+    post_type = models.CharField(max_length=7, choices= POST_TYPES)
     create_time = models.DateTimeField(auto_now_add=True)
     category_post = models.ManyToManyField(Category, through='PostCategory')
     title_post = models.CharField(max_length=255)
@@ -50,5 +50,13 @@ class Comment (models.Model):
     text_comment = models.TextField()
     create_time_comment = models.DateTimeField(auto_now_add=True)
     rating_comment = models.IntegerField(default=0)
+
+    def like(self):
+        self.rating_comment += 1
+        self.save()
+
+    def dislike(self):
+        self.rating_comment -= 1
+        self.save()
 
 
