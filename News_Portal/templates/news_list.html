@@ -1,13 +1,26 @@
 {% extends 'flatpages/default.html' %}
-
+{% block title %}
+Posts
+{% endblock title %}
 {% block content %}
   <h1>Все новости</h1>
-  <ul>
-    {% for post in news %}
-      <li>
-        <a href="{% url 'news_detail' post.pk %}">{{ post.title_post }}</a>
-        <p>{{ post.preview }}</p>
-      </li>
-    {% endfor %}
-  </ul>
+  <h3> Количество статей: {{news|length}} </h3>
+{% if news  %}
+<table>
+  <tr>
+    <td>Заголовок</td>
+    <td>Дата публикации</td>
+    <td>Тескт</td>
+  </tr>
+  {% for post in news %}
+  <tr>
+    <td>{{ post.title_post }}</td>
+    <td>{{ post.create_time| date:'d M Y'}}</td>
+    <td>{{ post.text_post|truncatechars:20 }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<h2>Публикаций нет!</h2>
+{% endif %}
 {% endblock %}

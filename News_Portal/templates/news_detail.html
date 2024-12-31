@@ -1,8 +1,16 @@
 {% extends 'flatpages/default.html' %}
 
 {% block content %}
-  <h1>{{ post.title_post }}</h1>
-  <p>{{ post.text_post }}</p>
-  <p>Дата создания: {{ post.create_time }}</p>
-  <p>Рейтинг: {{ post.rating_post }}</p>
+<table>
+  <tr>
+    <td>Заголовок</td>
+    <td>Дата публикации</td>
+    <td>Текст</td>
+  </tr>
+  <tr>
+    <td>{{ post.title_post }}</td>
+    <td>{{ post.create_time|date:'d M Y'}}</td>
+    <td>{{ post.text_post }}</td>
+  </tr>
+</table>
 {% endblock %}
