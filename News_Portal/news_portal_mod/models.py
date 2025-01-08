@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.core.validators import MinValueValidator
+from django.urls import reverse
 class Author (models.Model):
     rating = models.IntegerField(default = 0)
     name_author = models.OneToOneField(User, on_delete = models.CASCADE)
@@ -43,6 +44,10 @@ class Post (models.Model):
 
     def __str__(self):
         return f'{self.title_post.title()}'
+
+    def get_absolute_url(self):
+
+        return reverse('news_detail', args=[str(self.id)])
 
 class PostCategory (models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
