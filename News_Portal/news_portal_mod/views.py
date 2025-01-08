@@ -37,7 +37,7 @@ class PostsCreate(CreateView):
     def form_valid(self, form):
         if self.request.path.startswith('/news/create/'):
             form.instance.post_type = 'News'
-        elif self.request.path.startswith('/article/create/'):
+        elif self.request.path.startswith('/news/article/create/'):
             form.instance.post_type = 'Article'
         return super().form_valid(form)
 class PostsUpdate(UpdateView):
@@ -45,9 +45,9 @@ class PostsUpdate(UpdateView):
     model = Post
     template_name = 'posts_edit.html'
     def form_valid(self, form):
-        if self.request.path.startswith('/news/create/'):
+        if self.request.path.startswith('/news/edit/'):
             form.instance.post_type = 'News'
-        elif self.request.path.startswith('/article/create/'):
+        elif self.request.path.startswith('/news/article/edit/'):
             form.instance.post_type = 'Article'
         return super().form_valid(form)
 
