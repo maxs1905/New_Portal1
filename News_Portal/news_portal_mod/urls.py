@@ -3,6 +3,7 @@ from . import views
 from .views import (
     PostsList, PostsDetail, PostsSearch, PostsCreate
 )
+from django.contrib.auth.decorators import login_required
 urlpatterns = [
     # Путь для страницы со списком новостей
     path('', views.PostsList.as_view(), name='news_list'),

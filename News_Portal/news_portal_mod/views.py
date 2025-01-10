@@ -5,6 +5,8 @@ from datetime import datetime
 from .filters import PostFilter
 from .forms import PostForm
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 
 class PostsList(ListView):
     model = Post
@@ -40,10 +42,12 @@ class PostsCreate(CreateView):
         elif self.request.path.startswith('/news/article/create/'):
             form.instance.post_type = 'Article'
         return super().form_valid(form)
-class PostsUpdate(UpdateView):
+class PostsUpdate(UpdateView, LoginRequiredMixin):
     form_class = PostForm
     model = Post
     template_name = 'posts_edit.html'
+
+    login_url = '/login/'
     def form_valid(self, form):
         if self.request.path.startswith('/news/edit/'):
             form.instance.post_type = 'News'
