@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7a$1t-s2fsa$h9%(a)ksoy043hylu$4(d3!_pql-0oss1)x4_m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'news_portal_mod',
     'templates',
     'django_filters',
+    'sign'
+    'protect'
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -59,7 +61,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'News_Portal.urls'
@@ -77,7 +78,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.request'
             ],
         },
     },
@@ -163,4 +163,4 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
+ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}

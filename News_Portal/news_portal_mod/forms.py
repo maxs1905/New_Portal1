@@ -1,6 +1,8 @@
 from django import forms
 from .models import Post
 from django.core.exceptions import ValidationError
+from allauth.account.forms import SignupForm
+from django.contrib.auth.models import Group
 class PostForm(forms.ModelForm):
    class Meta:
        model = Post
@@ -23,3 +25,4 @@ class PostForm(forms.ModelForm):
            raise ValidationError("Тескт поста должен содержать минимум 20 символов.")
 
        return cleaned_data
+
