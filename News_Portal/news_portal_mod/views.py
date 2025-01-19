@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from .models import Post, Author
 from datetime import datetime
 from .filters import PostFilter
@@ -7,7 +7,7 @@ from .forms import PostForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-
+from django.contrib.auth.mixins import PermissionRequiredMixin
 class PostsList(ListView):
     model = Post
     template_name = 'news_list.html'
@@ -31,10 +31,11 @@ class PostsDetail(DetailView):
     template_name = 'news_detail.html'
     context_object_name = 'post'
 
-class PostsCreate(CreateView):
+class PostsCreate(CreateView, PermissionRequiredMixin):
     form_class = PostForm
     model = Post
     template_name = 'posts_edit.html'
+    permission_required = 'news.add_post'
 
     def form_valid(self, form):
         if self.request.path.startswith('/news/create/'):
@@ -42,10 +43,11 @@ class PostsCreate(CreateView):
         elif self.request.path.startswith('/news/article/create/'):
             form.instance.post_type = 'Article'
         return super().form_valid(form)
-class PostsUpdate(UpdateView, LoginRequiredMixin):
+class PostsUpdate(UpdateView, LoginRequiredMixin, PermissionRequiredMixin):
     form_class = PostForm
     model = Post
     template_name = 'posts_edit.html'
+    permission_required = 'news.change_post'
 
     login_url = '/login/'
     def form_valid(self, form):
@@ -59,3 +61,7 @@ class PostDelete(DeleteView):
     model = Post
     template_name = 'posts_delete.html'
     success_url = reverse_lazy('news_list')
+
+class MyView(PermissionRequiredMixin, View):
+    permission_required = ('<app>.<action>_<model>',
+                           '<app>.<action>_<model>')

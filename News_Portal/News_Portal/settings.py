@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'news_portal_mod',
     'templates',
     'django_filters',
-    'sign'
-    'protect'
+    'sign',
+    'protect',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -164,3 +164,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
+CSRF_COOKIE_SECURE = True  # для использования только через HTTPS
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_DOMAIN = '.example.com'
