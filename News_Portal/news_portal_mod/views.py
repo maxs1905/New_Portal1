@@ -1,6 +1,6 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
-from .models import Post, Author
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import Post, Author, Category
 from datetime import datetime
 from .filters import PostFilter
 from .forms import PostForm
@@ -8,6 +8,9 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.views import View
+
+
 class PostsList(ListView):
     model = Post
     template_name = 'news_list.html'
@@ -31,7 +34,7 @@ class PostsDetail(DetailView):
     template_name = 'news_detail.html'
     context_object_name = 'post'
 
-class PostsCreate(CreateView, PermissionRequiredMixin):
+class PostsCreate( PermissionRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'posts_edit.html'
@@ -43,7 +46,7 @@ class PostsCreate(CreateView, PermissionRequiredMixin):
         elif self.request.path.startswith('/news/article/create/'):
             form.instance.post_type = 'Article'
         return super().form_valid(form)
-class PostsUpdate(UpdateView, LoginRequiredMixin, PermissionRequiredMixin):
+class PostsUpdate(PermissionRequiredMixin, UpdateView, LoginRequiredMixin):
     form_class = PostForm
     model = Post
     template_name = 'posts_edit.html'
@@ -65,3 +68,9 @@ class PostDelete(DeleteView):
 class MyView(PermissionRequiredMixin, View):
     permission_required = ('<app>.<action>_<model>',
                            '<app>.<action>_<model>')
+class SubscribeView(View):
+    def post(self, request, *args, **kwargs):
+        category_id = request.Post.get('category_id')
+        category = Category.objects.get(id= category_id)
+        category.subscribers.add(request.user)
+        return redirect('news_list')

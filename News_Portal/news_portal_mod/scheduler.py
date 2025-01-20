@@ -1,0 +1,3 @@
+from apscheduler.schedulers.background import BackgroundScheduler
+
+new_portal_mod_scheduler=BackgroundScheduler()

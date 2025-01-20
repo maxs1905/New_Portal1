@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.urls import reverse
+from django.core.exceptions import ValidationError
+from datetime import datetime, timedelta
 class Author (models.Model):
     rating = models.IntegerField(default = 0)
     name_author = models.OneToOneField(User, on_delete = models.CASCADE)
@@ -19,6 +21,10 @@ class Author (models.Model):
 
 class Category (models.Model):
     name_category = models.CharField(max_length=255, unique= True)
+    subscribers = models.ManyToManyField(User, related_name='subscribers_categories')
+
+    def __str__(self):
+        return self.name_category
 
 class Post (models.Model):
     POST_TYPES = [
@@ -48,6 +54,11 @@ class Post (models.Model):
     def get_absolute_url(self):
 
         return reverse('news_detail', args=[str(self.id)])
+    def clean(self):
+        today=datetime.now().date()
+        post_today=Post.objects.filter(author=self.author, create_time__date=today)
+        if post_today.count() >=3:
+            raise ValidationError('Вы не можете побликовать более 3 постов в день.')
 
 class PostCategory (models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

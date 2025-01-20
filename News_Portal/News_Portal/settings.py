@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_apscheduler',
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.yandex',
 ]
@@ -62,7 +63,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+DEFAULT_FROM_EMAIL = 'Maxs.defmail@yandex.ru'
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 10
 ROOT_URLCONF = 'News_Portal.urls'
 
 TEMPLATES = [
@@ -168,3 +171,10 @@ CSRF_COOKIE_SECURE = True  # для использования только че
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_DOMAIN = '.example.com'
+
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'Maxs.defmail'
+EMAIL_HOST_PASSWORD = '191405.Maxs'
+EMAIL_USE_SSL = True
