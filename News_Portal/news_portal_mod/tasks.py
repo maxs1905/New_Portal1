@@ -4,7 +4,9 @@ from datetime import timedelta
 from .models import Post, Category
 from django.conf import settings
 from django.utils.timezone import now
+from celery import shared_task
 
+@shared_task
 def send_weekly_newsletter():
     week_ago = now() - timedelta(days=7)
     for category in Category.objects.all():

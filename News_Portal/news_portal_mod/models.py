@@ -54,11 +54,13 @@ class Post (models.Model):
     def get_absolute_url(self):
 
         return reverse('news_detail', args=[str(self.id)])
+
     def clean(self):
-        today=datetime.now().date()
-        post_today=Post.objects.filter(author=self.author, create_time__date=today)
-        if post_today.count() >=3:
+        today = datetime.now().date()
+        post_today = Post.objects.filter(author=self.author, create_time__date=today)
+        if post_today.count() >= 3:
             raise ValidationError('Вы не можете побликовать более 3 постов в день.')
+
 
 class PostCategory (models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

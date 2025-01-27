@@ -9,6 +9,7 @@ class PostForm(forms.ModelForm):
        model = Post
        fields = [
            'author',
+           'category_post',
            'title_post',
            'text_post',
        ]
@@ -28,4 +29,4 @@ class PostForm(forms.ModelForm):
        return cleaned_data
 
 class SubscribersForm(forms.ModelForm):
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), widget=forms.HiddenInput())
+    category_id=forms.IntegerField(widget=forms.HiddenInput())

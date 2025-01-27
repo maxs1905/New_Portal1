@@ -71,6 +71,6 @@ class MyView(PermissionRequiredMixin, View):
 class SubscribeView(View):
     def post(self, request, *args, **kwargs):
         category_id = request.Post.get('category_id')
-        category = Category.objects.get(id= category_id)
+        category = Category.objects.get(id=category_id)
         category.subscribers.add(request.user)
-        return redirect('news_list')
+        return redirect('category_detail.html', category_id=category_id)

@@ -1,7 +1,7 @@
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore
-from News_Portal.news_portal_mod.tasks import send_weekly_newsletter
+from news_portal_mod.tasks import send_weekly_newsletter
 from apscheduler.triggers.interval import IntervalTrigger
 from django.utils.timezone import now
 from django.core.management.base import BaseCommand
