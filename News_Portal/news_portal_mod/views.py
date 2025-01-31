@@ -69,8 +69,12 @@ class MyView(PermissionRequiredMixin, View):
     permission_required = ('<app>.<action>_<model>',
                            '<app>.<action>_<model>')
 class SubscribeView(View):
+    def get(self, request):
+        categories = Category.objects.all()
+        context = {'categories': categories}
+        return render(request, 'category_detail.html', context)
     def post(self, request, *args, **kwargs):
-        category_id = request.Post.get('category_id')
+        category_id = request.POST.get('category_id')
         category = Category.objects.get(id=category_id)
         category.subscribers.add(request.user)
-        return redirect('category_detail.html', category_id=category_id)
+        return redirect('subscribe')

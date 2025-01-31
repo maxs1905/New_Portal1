@@ -155,7 +155,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 SOCIALACCOUNT_PROVIDERS = {
     'yandex': {
@@ -170,10 +170,10 @@ ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'Maxs.defmail@yandex.ru'
-EMAIL_HOST_PASSWORD = '191511.Maxs'
+EMAIL_HOST_USER = 'Maxs.defmail'
+EMAIL_HOST_PASSWORD = 'lkbjjdnppkcqcjtx'
 EMAIL_USE_SSL = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'

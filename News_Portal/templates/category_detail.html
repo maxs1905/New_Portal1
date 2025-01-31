@@ -1,5 +1,16 @@
+{% extends 'flatpages/default.html' %}
+{% block content %}
+<h2>Подписка на категории!</h2>
+{% for category in categories %}
+{% if not user in category.subscribers.all%}
+{{ category.name_category }}
 <form method="POST" action="{% url 'subscribe' %}">
     {% csrf_token %}
     <input type="hidden" name="category_id" value="{{ category.id }}">
     <button type="submit">Подписаться</button>
 </form>
+{% else%}
+<h5>Вы уже подписаны на категорию {{ category.name_category }}</h5>
+{% endif %}
+{% endfor %}
+{% endblock content %}

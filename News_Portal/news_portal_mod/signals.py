@@ -5,18 +5,9 @@ from django.dispatch import receiver
 from .models import Post, PostCategory
 from django.contrib.auth.models import User
 from django.conf import settings
+from datetime import timedelta
+from django.utils import timezone
 
-@receiver(post_save, sender=User)
-def send_welome_email(sender, instance, created, **kwargs):
-    if created:
-        html_content = render_to_string('welcome.html', {'user':instance},)
-        send_mail(
-            subject="Добро пожаловать на сайт",
-            message="Спасибо за регистрацию",
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[instance.email],
-            html_message=html_content,
-        )
 
 @receiver(m2m_changed, sender=PostCategory)
 def send_newsletter(sender, instance, **kwargs):
@@ -30,6 +21,7 @@ def send_newsletter(sender, instance, **kwargs):
                         'notification_created.html',
                         {
                             'post': instance,
+                            'subscriber': subscriber
                         }
                     )
 
@@ -41,3 +33,28 @@ def send_newsletter(sender, instance, **kwargs):
                     )
                     msg.attach_alternative(html_content, 'text/html')
                     msg.send()
+@receiver(m2m_changed, sender=PostCategory)
+def send_weekly_newsletter(sender, instance, **kwargs):
+    if kwargs['action'] == 'post_add':
+        last_week = timezone.now() - timedelta(days=7)
+        new_posts = Post.objects.filter(create_time__gte=last_week)
+        subscribers = User.objects.filter(subscribers__in=new_posts.values('category_post'))
+
+        for subscriber in subscribers:
+            subscribed_posts = new_posts.filter(category_post__subscribers=subscriber)
+            html_content = render_to_string(
+                'weekly_notification_created.html',
+                {
+                    'subscriber': subscriber,
+                    'posts': subscribed_posts,
+                }
+            )
+
+            msg = EmailMultiAlternatives(
+                subject="Ваши новости за неделю",
+                body=f"Здравствуй, {{ subscriber.username }}. Вот список новых статей за последнюю неделю.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[subscriber.email],
+            )
+            msg.attach_alternative(html_content, 'text/html')
+            msg.send()
