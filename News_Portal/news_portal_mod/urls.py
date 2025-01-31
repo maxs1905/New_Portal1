@@ -4,11 +4,12 @@ from .views import (
     PostsList, PostsDetail, PostsSearch, PostsCreate
 )
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 urlpatterns = [
     # Путь для страницы со списком новостей
-    path('', views.PostsList.as_view(), name='news_list'),
+    path('', cache_page(60)(views.PostsList.as_view()), name='news_list'),
     # Путь для страницы с деталями новости
-    path('<int:pk>/', views.PostsDetail.as_view(), name='news_detail'),
+    path('<int:pk>/', cache_page(300)(views.PostsDetail.as_view()), name='news_detail'),
     path('search', views.PostsSearch.as_view(), name='new_search'),
     path('create/', views.PostsCreate.as_view(), name='news_create'),
     path('article/create/', views.PostsCreate.as_view(), name='article_create'),

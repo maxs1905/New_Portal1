@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
+from django.core.cache import cache
 class Author (models.Model):
     rating = models.IntegerField(default = 0)
     name_author = models.OneToOneField(User, on_delete = models.CASCADE)
@@ -55,6 +56,17 @@ class Post (models.Model):
 
         return reverse('news_detail', kwargs={'pk':self.pk})
 
+    def clean(self):
+        today = datetime.now().date()
+        post_today = Post.objects.filter(author=self.author, create_time__date=today)
+        if post_today.count() >= 3:
+            raise ValidationError('Вы не можете побликовать более 3 постов в день.')
+
+    def get_absolute_url(self):
+        return f'/news/{self.id}'
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        cache.delete(f'post-{self.pk}')
 
 
 

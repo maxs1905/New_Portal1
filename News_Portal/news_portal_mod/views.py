@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views import View
+from django.core.cache import cache
 
 
 class PostsList(ListView):
@@ -33,6 +34,15 @@ class PostsDetail(DetailView):
     model = Post
     template_name = 'news_detail.html'
     context_object_name = 'post'
+
+    def get(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)
+
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+        return obj
+
 
 class PostsCreate( PermissionRequiredMixin, CreateView):
     form_class = PostForm

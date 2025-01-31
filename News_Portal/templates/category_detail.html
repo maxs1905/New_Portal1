@@ -1,6 +1,8 @@
 {% extends 'flatpages/default.html' %}
+{% load cache%}
 {% block content %}
 <h2>Подписка на категории!</h2>
+{% cache 60 category_subscription%}
 {% for category in categories %}
 {% if not user in category.subscribers.all%}
 {{ category.name_category }}
@@ -13,4 +15,5 @@
 <h5>Вы уже подписаны на категорию {{ category.name_category }}</h5>
 {% endif %}
 {% endfor %}
+{% endcache %}
 {% endblock content %}

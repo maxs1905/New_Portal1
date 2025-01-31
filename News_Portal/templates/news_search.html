@@ -4,6 +4,7 @@
 {% block title %}
 Posts
 {% endblock title %}
+{% load cache%}
 {% block content %}
   <h1>Все новости</h1>
   <h3> Поиск публикаций:</h3>
@@ -13,6 +14,7 @@ Posts
        {# Добавим кнопку отправки данных формы #}
        <input type="submit" value="Найти" />
    </form>
+{% cache 300 news_list%}
 {% if news  %}
 <table>
   <tr>
@@ -31,6 +33,7 @@ Posts
 {% else %}
 <h2>Публикаций нет!</h2>
 {% endif %}
+{% endcache %}
    {% if page_obj.has_previous %}
        {# Для каждой ссылки пагинации указываем обработку через новый тег #}
        <a href="?{% url_replace page=1 %}">1</a>

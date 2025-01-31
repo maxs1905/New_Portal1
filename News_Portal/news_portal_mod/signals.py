@@ -21,7 +21,8 @@ def send_newsletter(sender, instance, **kwargs):
                         'notification_created.html',
                         {
                             'post': instance,
-                            'subscriber': subscriber
+                            'subscriber': subscriber,
+                            'link': settings.SITE_URL + instance.get_absolute_url(),
                         }
                     )
 
@@ -38,7 +39,7 @@ def send_weekly_newsletter(sender, instance, **kwargs):
     if kwargs['action'] == 'post_add':
         last_week = timezone.now() - timedelta(days=7)
         new_posts = Post.objects.filter(create_time__gte=last_week)
-        subscribers = User.objects.filter(subscribers__in=new_posts.values('category_post'))
+        subscribers = User.objects.filter(subscribers_categories__in=new_posts.values('category_post'))
 
         for subscriber in subscribers:
             subscribed_posts = new_posts.filter(category_post__subscribers=subscriber)
@@ -47,6 +48,7 @@ def send_weekly_newsletter(sender, instance, **kwargs):
                 {
                     'subscriber': subscriber,
                     'posts': subscribed_posts,
+                    'link': settings.SITE_URL,
                 }
             )
 

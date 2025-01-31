@@ -9,6 +9,6 @@
     <p>Новая статья в твоём любимом разделе!</p>
     <h3>{{ post.title_post }}</h3>
     <p>{{ post.text_post|truncatechars:50 }}</p>
-    <p> Чтобы прочитать статью полностью, перейди по <a href="{{ post.get_absolute_url }}">the link</a> </p>
+    <p> Чтобы прочитать статью полностью, перейди по <a href="{{ link }}">the link</a> </p>
 </body>
 </html>

@@ -11,12 +11,14 @@ Posts
     <td>Заголовок</td>
     <td>Дата публикации</td>
     <td>Тескт</td>
+    <td>Действия</td>
   </tr>
   {% for post in news %}
   <tr>
     <td>{{ post.title_post }}</td>
     <td>{{ post.create_time| date:'d M Y'}}</td>
     <td>{{ post.text_post|truncatechars:20 }}</td>
+    <td><a href="{% url 'news_detail' post.id %}">Читать полность...</a></td>
   </tr>
   {% endfor %}
 </table>
