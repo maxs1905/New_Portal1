@@ -20,7 +20,8 @@ def send_new_post(sender, instance, **kwargs):
                         'notification_created.html',
                         {
                             'post': instance,
-                            'subscriber': subscriber
+                            'subscriber': subscriber,
+                            'link': settings.SITE_URL + instance.get_absolute_url(),
                         }
                     )
 
@@ -46,6 +47,7 @@ def send_weekly_new_post(sender, instance, **kwargs):
                 {
                     'subscriber': subscriber,
                     'posts': subscribed_posts,
+                    'link': settings.SITE_URL,
                 }
             )
 

@@ -35,7 +35,7 @@ class PostsDetail(DetailView):
     template_name = 'news_detail.html'
     context_object_name = 'post'
 
-    def get(self, *args, **kwargs):
+    def get_object(self, *args, **kwargs):
         obj = cache.get(f'post-{self.kwargs["pk"]}', None)
 
         if not obj:
