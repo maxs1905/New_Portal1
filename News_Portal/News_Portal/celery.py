@@ -4,9 +4,9 @@ from celery.schedules import crontab
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'News_Portal.settings')
 
 app = Celery('News_Portal')
-app.conf.beat_shedule = {
+app.conf.beat_schedule = {
     'send_weekly_new_post': {
-        'task': 'News_portal.tasks.send_weekly_new_post',
+        'task': 'news_portal_mod.tasks.send_weekly_new_post',
         'schedule': crontab(hour=8, minute=0, day_of_week='monday'),
 
     }
