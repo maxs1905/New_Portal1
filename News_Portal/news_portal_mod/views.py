@@ -10,7 +10,8 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views import View
 from django.core.cache import cache
-
+from django.utils.translation import gettext as _
+from django.http import HttpResponse
 
 class PostsList(ListView):
     model = Post
@@ -88,3 +89,9 @@ class SubscribeView(View):
         category = Category.objects.get(id=category_id)
         category.subscribers.add(request.user)
         return redirect('subscribe')
+
+class Index(View):
+    def get(self, request):
+        string = _('My name Maxs')
+
+        return HttpResponse(string)

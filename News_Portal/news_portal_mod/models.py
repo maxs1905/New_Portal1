@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 from django.core.cache import cache
+from django.utils.translation import gettext as _
+from django.utils.translation import pgettext_lazy
 class Author (models.Model):
     rating = models.IntegerField(default = 0)
     name_author = models.OneToOneField(User, on_delete = models.CASCADE)
@@ -21,8 +23,9 @@ class Author (models.Model):
 
 
 class Category (models.Model):
-    name_category = models.CharField(max_length=255, unique= True)
+    name_category = models.CharField(max_length=255, unique= True, help_text=_('category name'))
     subscribers = models.ManyToManyField(User, related_name='subscribers_categories')
+
 
     def __str__(self):
         return self.name_category
@@ -90,3 +93,11 @@ class Comment (models.Model):
         self.save()
 
 
+class MyModel(models.Model):
+    name = models.CharField(max_length=100)
+    kind = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name='kinds',
+        verbose_name=pgettext_lazy('help text for MyModel model', 'This is the help text'),
+    )
