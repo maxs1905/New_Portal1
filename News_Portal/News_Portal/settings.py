@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.yandex',
     'modeltranslation',
-    'basic',
 ]
 
 SITE_ID = 1

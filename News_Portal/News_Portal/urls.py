@@ -27,5 +27,5 @@ urlpatterns = [
     path('sign/', include('sign.urls')),
     path('', include('protect.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
-    path('', include('basic.urls'))
+    path('', include('news_portal_mod.urls')),
 ]
